@@ -56,7 +56,8 @@ L.control.layers(baseMaps, overlays).addTo(map);
 // Retrieve the earthquake GeoJSON data
 let usgs = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 //Retrieve tectonic GeoJSON data
-let tec = "https://github.com/fraxen/tectonicplates/blob/master/GeoJSON/PB2002_boundaries.json";
+let tec = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+// let tec = "http://127.0.0.1:5500/Mapping_Earthquakes/Earthquake_Challenge/PB2002_boundaries.json";
 
 //Create a style for the lines.
 let myStyle = {
@@ -115,7 +116,7 @@ d3.json(usgs).then(function(data) {
 	L.geoJson(data, {
 		//Turn each feature into a circleMarker on the map.
 		pointToLayer: function(feature, latlng) {
-			console.log(data);
+			// console.log(data);
 			return L.circleMarker(latlng);
 		},
 		//We set the style for each circleMarker using our styleInfo function.
@@ -138,16 +139,15 @@ d3.json(tec).then(function(data) {
 		L.geoJson(data, {
 		style: myStyle,
 		onEachFeature: function(feature,layer) {
-		layer.bindPopup("<h3> Name: " + feature.properties.Name + "</h3><hr><h3> PlateA: "+ feature.properties.PlateA +
-		" &#124; PlateB: " +feature.properties.PlateB +"</h4>");
-		// Coordinates: "
-		// + feature.geometry.coordinates + "</h3>");
+		layer.bindPopup("<h3> Name: " + feature.properties.Name + "</h3><hr><h3> Coordinates: "
+		+ feature.geometry.coordinates + "</h3>");
+		
 	}
 	})
-	.addTo(techtonics);
+	.addTo(tectonics);
 
 	//Add the earthquake layer to our map.
-	techtonics.addTo(map);
+	tectonics.addTo(map);
 });
 // Create a legend control object.
 let legend = L.control({
